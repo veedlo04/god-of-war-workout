@@ -15,7 +15,7 @@
     }
 
     .container {
-      max-width: 500px;
+      max-width: 600px;
       margin: 60px auto;
       background-color: #222;
       padding: 30px;
@@ -71,6 +71,36 @@
     a:hover {
       text-decoration: underline;
     }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 40px;
+      background-color: #1a1a1a;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: center;
+      border-bottom: 1px solid #333;
+    }
+
+    th {
+      background-color: #333;
+    }
+
+    .delete-btn {
+      background: red;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      background-color: darkred;
+    }
   </style>
 </head>
 <body>
@@ -113,6 +143,34 @@
     </form>
 
     <a href="/dashboard">📊 View Dashboard</a>
+
+    {% if entries %}
+      <h2 style="text-align:center; margin-top: 40px;">Your Logged Battles</h2>
+      <table>
+        <tr>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Exercise</th>
+          <th>Plan</th>
+          <th>Weight</th>
+          <th>Delete</th>
+        </tr>
+        {% for row in entries %}
+        <tr>
+          <td>{{ row['Date'] }}</td>
+          <td>{{ row['Workout Type'] }}</td>
+          <td>{{ row['Exercise'] }}</td>
+          <td>{{ row['Battle Plan'] }}</td>
+          <td>{{ row['Weight (kg)'] }}</td>
+          <td>
+            <form method="POST" action="/delete/{{ loop.index0 }}" onsubmit="return confirm('Delete this entry?');">
+              <button type="submit" class="delete-btn">🗑️</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    {% endif %}
   </div>
 
   <script>
