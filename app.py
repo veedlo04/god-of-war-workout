@@ -1,8 +1,10 @@
-# God of War Workout Tracker (Flask App with JSON API and Dashboard Route)
+# God of War Workout Tracker (Flask App with Entry Management)
 
 from flask import Flask, render_template, request, redirect, jsonify
 from tracker import update_log_and_stats, get_summary_stats
 from datetime import datetime
+import pandas as pd
+import os
 
 app = Flask(__name__)
 LOG_PATH = "log.xlsx"
@@ -10,7 +12,6 @@ LOG_PATH = "log.xlsx"
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        # Collect sets and reps separately and build battle plan
         sets = request.form['sets']
         reps = request.form['reps']
         entry = {
@@ -23,7 +24,32 @@ def index():
         update_log_and_stats(entry, LOG_PATH)
         return redirect('/')
 
-    return render_template('index.html')
+    # Load entries for display on home page (optional preview)
+    if os.path.exists(LOG_PATH):
+        df = pd.read_excel(LOG_PATH, engine='openpyxl')
+        entries = df.to_dict(orient='records')
+    else:
+        entries = []
+
+    return render_template('index.html', entries=entries)
+
+@app.route('/entries')
+def entries():
+    if os.path.exists(LOG_PATH):
+        df = pd.read_excel(LOG_PATH, engine='openpyxl')
+        entries = df.to_dict(orient='records')
+    else:
+        entries = []
+    return render_template('entries.html', entries=entries)
+
+@app.route('/delete/<int:row_id>', methods=['POST'])
+def delete_entry(row_id):
+    if os.path.exists(LOG_PATH):
+        df = pd.read_excel(LOG_PATH, engine='openpyxl')
+        if 0 <= row_id < len(df):
+            df = df.drop(index=row_id).reset_index(drop=True)
+            df.to_excel(LOG_PATH, index=False, engine='openpyxl')
+    return redirect(request.referrer or '/')
 
 @app.route('/dashboard')
 def dashboard():
