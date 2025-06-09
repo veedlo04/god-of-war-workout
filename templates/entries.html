@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Manage Workout Entries</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #f0f0f0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background-color: #222;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+    }
+
+    h1 {
+      text-align: center;
+      color: #ff4d4d;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: #1a1a1a;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: center;
+      border-bottom: 1px solid #333;
+    }
+
+    th {
+      background-color: #333;
+    }
+
+    .delete-btn {
+      background: red;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      background-color: darkred;
+    }
+
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #ff8080;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧾 Manage All Entries</h1>
+    <a href="/">← Back to Logging</a>
+
+    {% if entries %}
+    <table>
+      <tr>
+        <th>Date</th>
+        <th>Type</th>
+        <th>Exercise</th>
+        <th>Plan</th>
+        <th>Weight</th>
+        <th>Delete</th>
+      </tr>
+      {% for row in entries %}
+      <tr>
+        <td>{{ row['Date'] }}</td>
+        <td>{{ row['Workout Type'] }}</td>
+        <td>{{ row['Exercise'] }}</td>
+        <td>{{ row['Battle Plan'] }}</td>
+        <td>{{ row['Weight (kg)'] }}</td>
+        <td>
+          <form method="POST" action="/delete/{{ loop.index0 }}" onsubmit="return confirm('Delete this entry?');">
+            <button type="submit" class="delete-btn">🗑️</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <p>No entries found.</p>
+    {% endif %}
+  </div>
+</body>
+</html>
