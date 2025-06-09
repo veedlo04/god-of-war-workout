@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>God of War Workout Log</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <style>
+    body {
+      background-color: #111;
+      color: #f0f0f0;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 60px auto;
+      background-color: #222;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+    }
+
+    h1 {
+      text-align: center;
+      color: #ff4d4d;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      margin-bottom: 16px;
+      border: none;
+      border-radius: 4px;
+      background-color: #333;
+      color: white;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      background-color: #ff4d4d;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #e63939;
+    }
+
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #ff8080;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🏋️‍♂️ God of War Workout Log</h1>
+
+    <form method="POST">
+      <label for="workout_type">Workout Type:</label>
+      <select id="workout_type" name="workout_type" required>
+        <option value="">-- Choose Type --</option>
+        <option value="Upper Body">Upper Body</option>
+        <option value="Lower Body">Lower Body</option>
+      </select>
+
+      <label for="exercise">Exercise:</label>
+      <select id="exercise" name="exercise" required>
+        <option value="">-- Select Workout Type First --</option>
+      </select>
+
+      <label for="sets">Sets:</label>
+      <select id="sets" name="sets" required>
+        <option value="">-- Select --</option>
+        {% for set in range(1, 8) %}
+          <option value="{{ set }}">{{ set }}</option>
+        {% endfor %}
+      </select>
+
+      <label for="reps">Reps:</label>
+      <select id="reps" name="reps" required>
+        <option value="">-- Select --</option>
+        {% for rep in range(4, 21) %}
+          <option value="{{ rep }}">{{ rep }}</option>
+        {% endfor %}
+      </select>
+
+      <label for="weight">Weight (kg):</label>
+      <input type="number" step="0.1" id="weight" name="weight" required>
+
+      <button type="submit">Log Battle</button>
+    </form>
+
+    <a href="/dashboard">📊 View Dashboard</a>
+  </div>
+
+  <script>
+    const exerciseMap = {
+      "Upper Body": ["Bench Press", "Pull-ups", "Overhead Press"],
+      "Lower Body": ["Squat", "Deadlift", "Lunges"]
+    };
+
+    document.getElementById('workout_type').addEventListener('change', function () {
+      const type = this.value;
+      const exerciseSelect = document.getElementById('exercise');
+      exerciseSelect.innerHTML = '<option value="">-- Choose Exercise --</option>';
+
+      if (exerciseMap[type]) {
+        exerciseMap[type].forEach(function (exercise) {
+          const option = document.createElement('option');
+          option.value = exercise;
+          option.textContent = exercise;
+          exerciseSelect.appendChild(option);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

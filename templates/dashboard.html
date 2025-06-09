@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>God of War Workout Dashboard</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🏋️‍♂️ God of War Training Dashboard</h1>
+
+    <div class="stats">
+      <p><strong>Total Volume:</strong> <span id="total-volume"></span> kg</p>
+      <p><strong>Days Logged:</strong> <span id="days-logged"></span></p>
+      <p><strong>Avg Volume/Day:</strong> <span id="avg-volume"></span> kg</p>
+    </div>
+
+    <div id="xp-container">
+      <div id="xp-label">
+        <span id="current-title"></span> → <span id="next-title"></span>
+      </div>
+      <div id="xp-bar-bg">
+        <div id="xp-bar-fill" style="width: 0%;"></div>
+      </div>
+      <div id="xp-percentage">0%</div>
+    </div>
+
+    <canvas id="progress-chart" width="600" height="300"></canvas>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    fetch('/dashboard-data')
+      .then(res => res.json())
+      .then(data => {
+        const stats = data.stats;
+        document.getElementById("total-volume").textContent = stats.total_volume;
+        document.getElementById("days-logged").textContent = stats.days_logged;
+        document.getElementById("avg-volume").textContent = stats.avg_per_day;
+        document.getElementById("current-title").textContent = stats.current_title;
+        document.getElementById("next-title").textContent = stats.next_title || "Maxed Out";
+        document.getElementById("xp-bar-fill").style.width = stats.xp_percent + "%";
+        document.getElementById("xp-percentage").textContent = stats.xp_percent + "%";
+
+        const ctx = document.getElementById('progress-chart').getContext('2d');
+        const labels = data.chart.map(item => item.DateStr);
+        const volumes = data.chart.map(item => item.Volume);
+
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Volume Lifted (kg)',
+              data: volumes,
+              borderColor: '#E06C75',
+              backgroundColor: 'rgba(224,108,117,0.2)',
+              fill: true,
+              tension: 0.4
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { display: true }
+            }
+          }
+        });
+      });
+  </script>
+</body>
+</html>

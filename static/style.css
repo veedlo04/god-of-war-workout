@@ -1,0 +1,66 @@
+body {
+  font-family: 'Cinzel', serif;
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #C678DD;
+  margin-bottom: 40px;
+}
+
+.stats p {
+  font-size: 1.2em;
+  margin: 10px 0;
+}
+
+#xp-container {
+  margin: 20px auto;
+  max-width: 600px;
+  text-align: center;
+}
+
+#xp-label {
+  font-size: 1.2em;
+  color: #E5C07B;
+  margin-bottom: 5px;
+}
+
+#xp-bar-bg {
+  background: #2c2c2c;
+  border: 2px solid #E06C75;
+  border-radius: 10px;
+  height: 25px;
+  width: 100%;
+  overflow: hidden;
+}
+
+#xp-bar-fill {
+  background: linear-gradient(to right, #C678DD, #61AFEF);
+  height: 100%;
+  transition: width 0.5s ease-in-out;
+}
+
+#xp-percentage {
+  font-size: 1em;
+  color: #ABB2BF;
+  margin-top: 5px;
+}
+
+canvas {
+  display: block;
+  margin: 40px auto 0;
+  background: #282c34;
+  border: 1px solid #3a3f4b;
+  border-radius: 8px;
+  padding: 10px;
+}
